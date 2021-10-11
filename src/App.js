@@ -6,7 +6,6 @@ import Quest from "./Quest";
 import cloneDeep from "lodash.clonedeep";
 
 import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
-//import {withRouter} from "react-router";
 import {LinkContainer} from 'react-router-bootstrap';
 import { Navbar, Nav } from 'react-bootstrap'
 
@@ -118,9 +117,6 @@ class App extends Component {
                 <LinkContainer to="/about">
                   <Nav.Link href="/about">About</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/credits">
-                  <Nav.Link href="/credits">Credits</Nav.Link>
-                </LinkContainer>
               </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -164,10 +160,18 @@ class App extends Component {
             <Pokedex pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}/>
           </Route>
           <Route exact path="/about">
-            About
-          </Route>
-          <Route exact path="/credits">
-            Credits
+            <div className="scrollable-full full-height d-flex justify-content-center flex-column bg-image" style={{backgroundImage: "url(images/wallpaper.jpg)"}}>
+              <div className="bg-opacity-75 bg-white text-center p-3 m-auto">
+                <h1>Created by Pete Dibdin</h1>
+                <h2>Tested by Caleb Dibdin</h2>
+                <p>
+                  Coded in Javascript, HTML and CSS<br/>
+                  Frameworks: React, Bootstrap and React-Bootstrap<br/>
+                  Pokémon data and images provided by PokéAPI<br/>
+                </p>
+              </div>
+            </div>
+
           </Route>
         </Switch>
       </BrowserRouter>

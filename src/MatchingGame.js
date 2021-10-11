@@ -492,7 +492,7 @@ class MatchingGame extends Component {
           {(this.state.bigWord !== null) &&     
             <div className="centered-overlay">
               {this.state.bigWord.split("").map((letter, i) => (
-                  <span>{letter}</span>
+                  <span className="big-text big-text-letter">{letter}</span>
               ))}
             </div>
           }          

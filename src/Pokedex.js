@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import PokemonCard from "./PokemonCard";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row"; 
-import Dropdown from "react-bootstrap/Dropdown"; 
+import Dropdown from "react-bootstrap/Dropdown";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 class Pokedex extends Component {
 
@@ -172,7 +174,7 @@ class Pokedex extends Component {
               {filteredList.map((species, i) => (
                 <Col className="border rounded d-flex align-items-center justify-items-center" xs={4} md={2}>
                   <div onClick={(e) => this.handleSpeciesChange(species.name)}>
-                    <img className="w-100" alt={species.name} src={species.varieties[0].imageUrl}/>
+                    <LazyLoadImage key={i} className="w-100" alt={species.name} src={species.varieties[0].imageUrl}/>
                   </div>
                 </Col>    
               ))}
@@ -184,8 +186,11 @@ class Pokedex extends Component {
           {((this.state.currentSpecies === null) || this.state.currentVariety === null) &&
             <div className="text-center">
               <h1>The {this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].displayName} Pokedéx</h1>
-              <img className="w-75" alt={`${this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].displayName} Pokedéx`}
-                src={this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].imageUrl}/>
+              <LazyLoadImage className="w-75" 
+                alt={`${this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].displayName} Pokedéx`}
+                src={this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].imageUrl}
+                effect="opacity"
+              />
             </div>
           }
             {((this.state.currentSpecies !== null) && this.state.currentVariety !== null) &&
