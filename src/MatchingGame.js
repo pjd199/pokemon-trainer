@@ -389,7 +389,7 @@ class MatchingGame extends Component {
    */
   render() {
     // find best combination of rows, columns and image size
-    let numberOfRows = 0;
+    //let numberOfRows = 0;
     let numberOfCols = 0;
     let size = 0;
     for (let i = 1; i <= this.state.maxOnScreen; i++) {
@@ -400,7 +400,7 @@ class MatchingGame extends Component {
         let calcSize = Math.min(((this.state.innerWidth * 0.9) / calcCols), ((this.state.innerHeight * 0.8) / calcRows)); 
         // if this is a better size
         if (calcSize >= size) {
-          numberOfRows = calcRows;
+          //numberOfRows = calcRows;
           numberOfCols = calcCols;
           size = calcSize;
         }
