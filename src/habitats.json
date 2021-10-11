@@ -1,0 +1,47 @@
+[
+    {
+        "name": "cave",
+        "id": "1",
+        "displayName": "Cave"
+    },
+    {
+        "name": "forest",
+        "id": "2",
+        "displayName": "Forest"
+    },
+    {
+        "name": "grassland",
+        "id": "3",
+        "displayName": "Grassland"
+    },
+    {
+        "name": "mountain",
+        "id": "4",
+        "displayName": "Mountain"
+    },
+    {
+        "name": "rare",
+        "id": "5",
+        "displayName": "Rare"
+    },
+    {
+        "name": "rough-terrain",
+        "id": "6",
+        "displayName": "Rough Terrain"
+    },
+    {
+        "name": "sea",
+        "id": "7",
+        "displayName": "Sea"
+    },
+    {
+        "name": "urban",
+        "id": "8",
+        "displayName": "Urban"
+    },
+    {
+        "name": "waters-edge",
+        "id": "9",
+        "displayName": "Water's Edge"
+    }
+]

@@ -1,0 +1,72 @@
+[
+    {
+        "name": "ball",
+        "id": "1",
+        "displayName": "Ball"
+    },
+    {
+        "name": "squiggle",
+        "id": "2",
+        "displayName": "Squiggle"
+    },
+    {
+        "name": "fish",
+        "id": "3",
+        "displayName": "Fish"
+    },
+    {
+        "name": "arms",
+        "id": "4",
+        "displayName": "Arms"
+    },
+    {
+        "name": "blob",
+        "id": "5",
+        "displayName": "Blob"
+    },
+    {
+        "name": "upright",
+        "id": "6",
+        "displayName": "Upright"
+    },
+    {
+        "name": "legs",
+        "id": "7",
+        "displayName": "Legs"
+    },
+    {
+        "name": "quadruped",
+        "id": "8",
+        "displayName": "Quadruped"
+    },
+    {
+        "name": "wings",
+        "id": "9",
+        "displayName": "Wings"
+    },
+    {
+        "name": "tentacles",
+        "id": "10",
+        "displayName": "Tentacles"
+    },
+    {
+        "name": "heads",
+        "id": "11",
+        "displayName": "Heads"
+    },
+    {
+        "name": "humanoid",
+        "id": "12",
+        "displayName": "Humanoid"
+    },
+    {
+        "name": "bug-wings",
+        "id": "13",
+        "displayName": "Bug Wings"
+    },
+    {
+        "name": "armor",
+        "id": "14",
+        "displayName": "Armor"
+    }
+]

@@ -1,0 +1,57 @@
+[
+    {
+        "name": "national",
+        "id": "01",
+        "displayName": "National"
+    },
+    {
+        "name": "kanto",
+        "id": "11",
+        "displayName": "Kanto"
+    },
+    {
+        "name": "johto",
+        "id": "21",
+        "displayName": "Johto"
+    },
+    {
+        "name": "hoenn",
+        "id": "31",
+        "displayName": "Hoenn"
+    },
+    {
+        "name": "sinnoh",
+        "id": "41",
+        "displayName": "Sinnoh"
+    },
+    {
+        "name": "unova",
+        "id": "51",
+        "displayName": "Unova"
+    },
+    {
+        "name": "kalos-central",
+        "id": "61",
+        "displayName": "Central Kalos"
+    },
+    {
+        "name": "kalos-coastal",
+        "id": "71",
+        "displayName": "Coastal Kalos"
+    },
+    {
+        "name": "kalos-mountain",
+        "id": "81",
+        "displayName": "Mountain Kalos"
+    },
+    {
+        "name": "alola",
+        "id": "91",
+        "displayName": "Alola"
+    },
+    {
+        "name": "galar",
+        "id": "101",
+        "displayName": "Galar"
+    }
+]

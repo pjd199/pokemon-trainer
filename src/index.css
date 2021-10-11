@@ -1,13 +1,212 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css");
+
+
+h1 {
+  font-family: 'Poppins', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.brand {
+  font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.scrollable-left {
+	float: left;
+  	margin-top: 10vh;
+	height: 90vh;
+	width: 60%;
+	overflow-y: auto;
+}
+
+.scrollable-right {
+	float: right;
+  	margin-top: 10vh;
+	height: 90vh;
+	width: 40%;
+	overflow-y: auto;
+}
+
+.scrollable-full {
+	float: left;
+  	margin-top: 10vh;
+	height: 90vh;
+	width: 100vw;
+	overflow-y: auto;
+}
+
+.type-hint {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	border-radius: 50px;
+	padding: 3px;
+	background: grey;
+	opacity: 90%;
+}
+
+.shape-hint {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	border-radius: 50px;
+	padding: 3px;
+	background: grey;
+	opacity: 90%;
+}
+
+.centered-overlay {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-family: 'Poppins', sans-serif;
+	font-size: 20vh;
+	pointer-events: none;
+}
+
+.bg-image {
+
+	/* Center and scale the image nicely */
+	background-position: center-top;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.pair-name-overlay {
+	font-family: 'Poppins', sans-serif;
+	font-size: larger;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.multiplier-overlay {
+	font-family: 'Poppins', sans-serif;
+	font-size: x-large;
+	text-align: center;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+span {
+	color: yellow;
+	pointer-events: none;	
+	opacity: 0;
+	animation: blur 2s ease;
+	-webkit-animation: blur 2s ease;
+}
+
+span:nth-child(1) {
+	animation-delay: 0.1s;
+	-webkit-animation-delay: 0.1s;
+}
+span:nth-child(2) {
+	animation-delay: 0.2s;
+	-webkit-animation-delay: 0.2s;
+}
+span:nth-child(3) {
+	animation-delay: 0.3s;
+	-webkit-animation-delay: 0.3s;
+}
+span:nth-child(4) {
+	animation-delay: 0.4s;
+	-webkit-animation-delay: 0.4s;
+}
+span:nth-child(5) {
+	animation-delay: 0.5s;
+	-webkit-animation-delay: 0.5s;
+}
+span:nth-child(6) {
+	animation-delay: 0.6s;
+	-webkit-animation-delay: 0.6s;
+}
+span:nth-child(7) {
+	animation-delay: 0.7s;
+	-webkit-animation-delay: 0.7s;
+}
+span:nth-child(8) {
+	animation-delay: 0.8s;
+	-webkit-animation-delay: 0.8s;
+}
+span:nth-child(9) {
+	animation-delay: 0.9s;
+	-webkit-animation-delay: 0.9s;
+}
+span:nth-child(10) {
+	animation-delay: 1.0s;
+	-webkit-animation-delay: 1.0s;
+}
+span:nth-child(11) {
+	animation-delay: 1.1s;
+	-webkit-animation-delay: 1.1s;
+}
+span:nth-child(12) {
+	animation-delay: 1.2s;
+	-webkit-animation-delay: 1.2s;
+}
+span:nth-child(13) {
+	animation-delay: 1.3s;
+	-webkit-animation-delay: 1.3s;
+}
+span:nth-child(14) {
+	animation-delay: 1.4s;
+	-webkit-animation-delay: 1.4s;
+}
+span:nth-child(15) {
+	animation-delay: 1.5s;
+	-webkit-animation-delay: 1.5s;
+}
+span:nth-child(16) {
+	animation-delay: 1.6s;
+	-webkit-animation-delay: 1.6s;
+}
+span:nth-child(17) {
+	animation-delay: 1.7s;
+	-webkit-animation-delay: 1.7s;
+}
+span:nth-child(18) {
+	animation-delay: 1.8s;
+	-webkit-animation-delay: 1.8s;
+}
+span:nth-child(19) {
+	animation-delay: 1.9s;
+	-webkit-animation-delay: 1.9s;
+}
+span:nth-child(20) {
+	animation-delay: 2.0s;
+	-webkit-animation-delay: 2.0s;
+}
+
+@keyframes blur {
+	0%		{text-shadow:  0 0 100px royalblue; opacity:0;}
+	10%		{text-shadow:  0 0 90px royalblue;}
+	30%		{opacity: 1;}
+	49%		{text-shadow:  0 0 30px royalblue;}
+	51%		{text-shadow:  0 0 30px royalblue;}
+	70%		{opacity: 1;}
+	90%		{text-shadow:  0 0 90px royalblue;}
+	100%	{text-shadow:  0 0 100px royalblue; opacity:0;}
+}
+
+@-webkit-keyframes blur {
+	0%		{text-shadow:  0 0 100px gold; opacity:0;}
+	5%		{text-shadow:  0 0 90px gold;}
+	30%		{opacity: 1;}
+	40%		{text-shadow:  0 0 30px gold;}
+	60%		{text-shadow:  0 0 30px gold;}
+	70%		{opacity: 1;}
+	95%		{text-shadow:  0 0 90px gold;}
+	100%	{text-shadow:  0 0 100px gold; opacity:0;}
 }
