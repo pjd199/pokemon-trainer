@@ -68,7 +68,6 @@ class Pokedex extends Component {
   }
 
   handleFilterChange (name, index) {
-    alert(name + " " + index);
     this.setState((state) => {
       state.filter[name] = index;
       if (name === "pokedex") {
