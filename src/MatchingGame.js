@@ -6,7 +6,7 @@ class MatchingGame extends Component {
 
   static levelConfig = {
     easy: {
-      maxTurns: 2,
+      maxTurns: 15,
       hintsAvailable: 999,
       showHowManyToCatch: false  ,
       maxOnScreen: 12,
