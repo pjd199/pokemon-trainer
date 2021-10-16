@@ -19,31 +19,23 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    
-    // initiailize the default state
-    this.state = {
-      pokedexes: null,
-      species: null,
-      varieties: null,
-    };
-
-    // bind methods to this instance of the App
-    this.loadData = this.loadData.bind(this);
-    
-    setTimeout(this.loadData, 0);
-  }
-
-  async loadData() {
     let pokedexData = require("./pokedexData.json");
     let speciesData = require("./speciesData.json");
     let pokemonData = require("./pokemonData.json");
 
-    // resolve the references in the data, changing string names into object references
+    // resolve the references in the varieties, changing string names into object references
     let varieties = {};
     for (let i in pokemonData) {
       varieties[pokemonData[i].name] = cloneDeep(pokemonData[i]);
+      varieties[pokemonData[i].name].seen = false;
+      varieties[pokemonData[i].name].caught = false;
     }
+    // set the Kanto starter pokemon to seen & caught
+    varieties.bulbasaur.seen = true;
+    varieties.charmander.seen = true;
+    varieties.squirtle.seen = true;
 
+    // resolve the references in the species, changing string names into object references
     let species = {};
     for (let i in speciesData) {
       species[speciesData[i].name] = cloneDeep(speciesData[i]);
@@ -61,6 +53,7 @@ class App extends Component {
       }
     }
 
+    // resolve the references in the pokedexes, changing string names into object references
     let pokedexes = {};
     for (let i in pokedexData) {
       pokedexes[pokedexData[i].name] = cloneDeep(pokedexData[i]);
@@ -70,10 +63,46 @@ class App extends Component {
       }
     }
 
-    this.setState ({
+    pokedexes["personal"] = cloneDeep(pokedexes["national"]);
+    pokedexes["personal"].name = "personal";
+    pokedexes["personal"].displayName = "Personal";
+
+    this.state = {
       pokedexes: pokedexes,
       species: species,
       varieties: varieties
+    };
+
+    // bind methods to this instance of the App
+    this.addToPersonalPokedex = this.addToPersonalPokedex.bind(this);
+    
+  }
+
+  /**
+   * Add the species to the Personal Pokedex
+   * @param {species} array
+   */
+  addToPersonalPokedex(seen, caught) {
+    this.setState ((prevState) => {
+      let pokedexes = cloneDeep(prevState.pokedexes);
+      let varieties = cloneDeep(prevState.varieties);
+      
+      // mark the pokemon as seen
+      for (let i in seen) {      
+        let species = pokedexes.personal.species.find(x => x.name === seen[i].name);
+        species.varieties[0].seen = true;
+      }
+
+      // mark the pokemon as caught
+      for (let i in caught) {
+        let species = pokedexes.personal.species.find(x => x.name === caught[i].name);
+        species.varieties[0].caught = true;
+      }
+
+      return {
+        pokedexes: pokedexes,
+        varieties: varieties
+      }
     });
   }
   
@@ -82,6 +111,7 @@ class App extends Component {
    * @returns The HTML rendering of the App.
    */
   render() {
+    let self = this;
 
     if ((this.state.pokedexes === null) || (this.state.species === null) || (this.state.varieties === null)) {
       return (
@@ -146,14 +176,14 @@ class App extends Component {
             (props) => 
               <MatchingGame pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}
               mode={props.match.params.mode} region={props.match.params.region} level={props.match.params.level}
-              gameOver={() => props.history.goBack()}
+              gameOver={(seen, caught) => {self.addToPersonalPokedex(seen, caught); props.history.push("/");}}
               />
           } />
           <Route path="/TypeEffectivenessGame/:mode/:region/:level" component={ 
             (props) => 
               <TypeEffectivenessGame pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}
               mode={props.match.params.mode} region={props.match.params.region} level={props.match.params.level}
-              gameOver={() => props.history.goBack()}
+              gameOver={(seen, caught) => {self.addToPersonalPokedex(seen, caught); props.history.push("/");}}
               />
           } />
           <Route exact path="/pokedex">

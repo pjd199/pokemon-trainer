@@ -6,7 +6,7 @@ class MatchingGame extends Component {
 
   static levelConfig = {
     easy: {
-      maxTurns: 20,
+      maxTurns: 2,
       hintsAvailable: 999,
       showHowManyToCatch: false  ,
       maxOnScreen: 12,
@@ -361,7 +361,7 @@ class MatchingGame extends Component {
           // end of round
           endMessage = `End of Round! You caught ${endOfTurnState.caught.length} pokemon.`;
           alert (endMessage);
-          endOfTurnState.gameOver(endOfTurnState.caught);
+          endOfTurnState.gameOver([...endOfTurnState.caught, ...endOfTurnState.escaped, ...endOfTurnState.table.map(x => x.species)], endOfTurnState.caught);
           endIgnoreClicks = true;
         } else {
           // not yet the end, so increament the turn counter
@@ -486,7 +486,9 @@ class MatchingGame extends Component {
         <div className="w-100 d-flex justify-items-center">
           <div className="m-auto">
             <table>
-              {rows}
+              <tbody>
+                {rows}
+              </tbody>
             </table>
           </div>
           {(this.state.bigWord !== null) &&     

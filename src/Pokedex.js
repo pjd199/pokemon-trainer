@@ -16,8 +16,8 @@ class Pokedex extends Component {
 
   static filters = { 
     pokedex: {
-      names: [...Pokedex.pokedexes.map((item, i) => item.name)],
-      displayNames: [...Pokedex.pokedexes.map((item, i) => (item.displayName + " Pokedéx"))]
+      names: ["personal", ...Pokedex.pokedexes.map((item, i) => item.name)],
+      displayNames: ["Personal Pokedéx", ...Pokedex.pokedexes.map((item, i) => (item.displayName + " Pokedéx"))]
     },
     color: {
       names: ["all", ...Pokedex.colors.map((item, i) => item.name)],
@@ -54,7 +54,7 @@ class Pokedex extends Component {
       currentSpecies: null,
       currentVariety: null,
       filter: {
-        pokedex: 1,
+        pokedex: 0,
         color: 0,
         habitat: 0,
         type: 0,
@@ -90,6 +90,11 @@ class Pokedex extends Component {
 
   getFilteredList() {
     let filteredList = [...this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].species];
+
+    // fitler Personal pokedex
+    if (this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].name === "personal") {
+      filteredList = filteredList.filter(species => species.varieties[0].seen);
+    }
 
     // filter on pokedex
     if (this.state.filter.color > 0) {
@@ -147,6 +152,8 @@ class Pokedex extends Component {
    */
   render() {
 
+    let isPersonalPokedex = (Pokedex.filters.pokedex.names[this.state.filter.pokedex] === "personal");
+
     // Get the pokemon to display with the current filter settings
     let filteredList = this.getFilteredList();
 
@@ -155,16 +162,16 @@ class Pokedex extends Component {
         <div className="scrollable-left">
           <div className="sticky-top d-flex bg-white p-1 border">
             {Object.keys(Pokedex.filters).map((name, i) => (
-              <Dropdown className="mx-1">
-              <Dropdown.Toggle variant="success" id={"dropdown-" + name}>
-                {Pokedex.filters[name].displayNames[this.state.filter[name]]}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {Pokedex.filters[name].displayNames.map((item, i) =>
-                  <Dropdown.Item eventKey={i} onClick={(e) => this.handleFilterChange(name, i)} >{item}</Dropdown.Item>
-                )}
-              </Dropdown.Menu>
-            </Dropdown>
+              <Dropdown className="mx-1" key={"dropdown-" + name}>
+                <Dropdown.Toggle variant="success">
+                  {Pokedex.filters[name].displayNames[this.state.filter[name]]}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {Pokedex.filters[name].displayNames.map((item, i) =>
+                    <Dropdown.Item eventKey={i} onClick={(e) => this.handleFilterChange(name, i)} key={"filter" + name + item} >{item}</Dropdown.Item>
+                  )}
+                </Dropdown.Menu>
+              </Dropdown>
             ))}
           </div>
 
@@ -172,9 +179,10 @@ class Pokedex extends Component {
             <Row className="m-1">
               {(filteredList.length === 0) && <h1 className="text-center">Found no matching Pokemon</h1>}
               {filteredList.map((species, i) => (
-                <Col className="border rounded d-flex align-items-center justify-items-center" xs={4} md={2}>
+                <Col className="border rounded d-flex align-items-center justify-items-center" key={species.name} xs={4} md={2}>
                   <div onClick={(e) => this.handleSpeciesChange(species.name)}>
-                    <LazyLoadImage key={i} className="w-100" alt={species.name} src={species.varieties[0].imageUrl}/>
+                    <LazyLoadImage key={i} className="w-100" alt={species.name} src={species.varieties[0].imageUrl} 
+                      style={{filter: (isPersonalPokedex && species.varieties[0].seen && !species.varieties[0].caught) ? "brightness(0)" : ""}}/>
                   </div>
                 </Col>    
               ))}
