@@ -5,7 +5,7 @@ import TypeEffectivenessGame from "./TypeEffectivenessGame";
 import Quest from "./Quest";
 import cloneDeep from "lodash.clonedeep";
 
-import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap';
 import { Navbar, Nav } from 'react-bootstrap'
 import Button from "react-bootstrap/Button";
