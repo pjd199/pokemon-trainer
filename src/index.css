@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Walter+Turncoat&family=Poppins:wght@600&family=Roboto&display=swap");
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css");
 
 
@@ -11,7 +11,8 @@ body {
 }
 
 .brand {
-  font-family: 'Poppins', sans-serif;
+	font-family: 'Walter Turncoat', cursive;
+	font-size: xx-large;
 }
 
 html, body {

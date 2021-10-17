@@ -10,15 +10,20 @@ class Quest extends Component {
     super(props);
 
     let regionList = [];
+    let regionBackgrounds = [];
     for (let i in props.pokedexes) {
-      if (props.pokedexes[i].name !== "national") {
+      if (props.pokedexes[i].name !== "national" && props.pokedexes[i].name !== "personal") {
         regionList.push(props.pokedexes[i].name);
+
+        let image = new Image();
+        image.src = `/images/region/${props.pokedexes[i].name}.png`
       }
     }
 
     this.state = {
       showLevelSelect: false,
       regionList: regionList,
+      regionBackgrounds: regionBackgrounds,
       regionIndex: 0,
       gameHeader: "MatchingGame",
       gameMode: "color",
@@ -70,7 +75,9 @@ class Quest extends Component {
           </Button>
           {/*View My Personal Pokedex*/}
           <div className="d-flex w-100 justify-content-between">
-            <Button variant="secondary" disabled={this.state.regionIndex === 0} onClick={() => this.setState((prevState) => ({regionIndex: prevState.regionIndex - 1}))}>
+            <Button variant="secondary" disabled={this.state.regionIndex === 0} onClick={
+              () => this.setState((prevState) => ({regionIndex: prevState.regionIndex - 1}))
+            }>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
               </svg>

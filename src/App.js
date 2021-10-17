@@ -8,6 +8,7 @@ import cloneDeep from "lodash.clonedeep";
 import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap';
 import { Navbar, Nav } from 'react-bootstrap'
+import Button from "react-bootstrap/Button";
 
 class App extends Component {
 
@@ -18,6 +19,9 @@ class App extends Component {
    */
   constructor(props) {
     super(props);
+
+    let preload = new Image();
+    preload.src = "/images/pokemon-training-center.png";
 
     let pokedexData = require("./pokedexData.json");
     let speciesData = require("./speciesData.json");
@@ -75,7 +79,6 @@ class App extends Component {
 
     // bind methods to this instance of the App
     this.addToPersonalPokedex = this.addToPersonalPokedex.bind(this);
-    
   }
 
   /**
@@ -132,29 +135,40 @@ class App extends Component {
           <Navbar.Toggle/>
           <Navbar.Collapse className="justify-content-end me-3" id="basic-navbar-nav">
               <Nav className="mr-auto">
-                <LinkContainer to="/">
-                  <Nav.Link href="/">Home</Nav.Link>
+                <LinkContainer exact to="/">
+                  <Nav.Link>Home</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/Quest">
-                  <Nav.Link href="/Quest">Quest</Nav.Link>
+                  <Nav.Link>Quest</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/Games">
-                  <Nav.Link href="/Games">Games</Nav.Link>
+                  <Nav.Link>Games</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/pokedex">
-                  <Nav.Link href="/pokedex">Pokedex</Nav.Link>
+                  <Nav.Link>Pokedex</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/about">
-                  <Nav.Link href="/about">About</Nav.Link>
+                  <Nav.Link>About</Nav.Link>
                 </LinkContainer>
               </Nav>
           </Navbar.Collapse>
         </Navbar>
 
         <Switch>
-          <Route exact path="/">
-            <Redirect to="/quest"/>
-          </Route>
+          <Route exact path="/" component={
+            (props) => 
+              <div className="scrollable-full full-height d-flex justify-content-center flex-column bg-image" style={{backgroundImage: "url(/images/pokemon-training-center.png)"}}>
+                <div className="bg-opacity-75 bg-white text-center p-3 m-auto">
+                  <h1>Welcome</h1>
+                  <p>
+                    Are you ready to become a Pokemon Master?
+                  </p>
+                  <Button className="m-3" variant="primary" onClick={() => props.history.push("/quest")}>
+                    Let's Go!
+                  </Button>
+                </div>
+              </div>
+          }/>
           <Route path="/quest">
             <Quest pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}
               changeUrl={(url) => this.props.history.push(url)}
@@ -176,14 +190,14 @@ class App extends Component {
             (props) => 
               <MatchingGame pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}
               mode={props.match.params.mode} region={props.match.params.region} level={props.match.params.level}
-              gameOver={(seen, caught) => {self.addToPersonalPokedex(seen, caught); props.history.push("/");}}
+              gameOver={(seen, caught) => {self.addToPersonalPokedex(seen, caught); props.history.goBack();}}
               />
           } />
           <Route path="/TypeEffectivenessGame/:mode/:region/:level" component={ 
             (props) => 
               <TypeEffectivenessGame pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}
               mode={props.match.params.mode} region={props.match.params.region} level={props.match.params.level}
-              gameOver={(seen, caught) => {self.addToPersonalPokedex(seen, caught); props.history.push("/");}}
+              gameOver={(seen, caught) => {self.addToPersonalPokedex(seen, caught); props.history.goBack();}}
               />
           } />
           <Route exact path="/pokedex">

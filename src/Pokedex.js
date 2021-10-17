@@ -49,6 +49,10 @@ class Pokedex extends Component {
   constructor(props) {
     super(props);
 
+    // Preload a blank image
+    let preload = new Image();
+    preload.src = "/images/blank.png";
+
     // initiailize the default state
     this.state = {
       currentSpecies: null,
@@ -181,7 +185,7 @@ class Pokedex extends Component {
               {filteredList.map((species, i) => (
                 <Col className="border rounded d-flex align-items-center justify-items-center" key={species.name} xs={4} md={2}>
                   <div onClick={(e) => this.handleSpeciesChange(species.name)}>
-                    <LazyLoadImage key={i} className="w-100" alt={species.name} src={species.varieties[0].imageUrl} 
+                    <LazyLoadImage key={i} className="w-100" alt={species.name} src={species.varieties[0].imageUrl} placeholderSrc="/images/blank.png"
                       style={{filter: (isPersonalPokedex && species.varieties[0].seen && !species.varieties[0].caught) ? "brightness(0)" : ""}}/>
                   </div>
                 </Col>    
