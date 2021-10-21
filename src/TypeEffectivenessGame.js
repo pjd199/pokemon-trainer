@@ -12,7 +12,7 @@ class TypeEffectivenessGame extends Component {
 
   static levelConfig = {
     easy: {
-      maxTurns: 20,
+      maxTurns: 2,
       hintsAvailable: 999,
       maxOnScreen: 6,
       timedMode: false
@@ -75,6 +75,8 @@ class TypeEffectivenessGame extends Component {
     this.state = {
       deck: deck,
       defender: defender,
+      caught: [],
+      escaped: [],
       attacks: this.getAttackArray(defender, level.maxOnScreen),
       maxOnScreen: level.maxOnScreen,
       turn: 1,
@@ -160,7 +162,9 @@ class TypeEffectivenessGame extends Component {
     // move the game on one throw after 500 milliseconds, so user see's update    
     this.setState ((prevState) => {
       let attacks = cloneDeep(prevState.attacks);
-      let defender = prevState.defender;
+      let defender = cloneDeep(prevState.defender);
+      let caught = cloneDeep(prevState.caught);
+      let escaped = cloneDeep(prevState.escaped);
       let message = ""; 
       let bigWord = null;
       let endOfTurn = false;
@@ -169,12 +173,16 @@ class TypeEffectivenessGame extends Component {
 
       if (attacks[position].multiplier >= 2) {
         bigWord = "Super Effective";
+        caught.push(defender);
       } else if (attacks[position].multiplier >= 1) {
         bigWord = "Good Attack";
+        caught.push(defender);
       } else if (attacks[position].multiplier > 0) {
         bigWord = "Not Very Effective";
+        escaped.push(defender);
       } else {
         bigWord = "No Effect";
+        escaped.push(defender);
       }
 
       message = `${attacks[position].name} type attack multiplier is ${attacks[position].multiplier} against ${defender.displayName} (${defender.varieties[0].types.join('/')})`;
@@ -183,6 +191,8 @@ class TypeEffectivenessGame extends Component {
 
       return {
         message: message,
+        caught: caught,
+        escaped: escaped,
         bigWord: bigWord,
         ignoreClicks: (endOfTurn ? true : false),
         endOfTurn: endOfTurn
@@ -196,36 +206,30 @@ class TypeEffectivenessGame extends Component {
         // need this because React Strict calls twice
         if (!endOfTurnState.endOfTurn) return;
 
-        let endDeck = [...endOfTurnState.deck];        
-        let defender = endDeck.pop();
-        let endAttacks = this.getAttackArray(defender, endOfTurnState.maxOnScreen);
-        let endMessage = `What's the best type to use against ${defender.displayName} (${defender.varieties[0].types.join('/')}).`;
-        let endTurn = endOfTurnState.turn;
-        let endIgnoreClicks = endOfTurnState.ignoreClicks;
+        let stateUpdate = {}
+        
+        stateUpdate.showHint = false;
+        stateUpdate.endOfTurn = false;
+        stateUpdate.bigWord = "";
 
         // check if end of round
-        if (endTurn >= endOfTurnState.level.maxTurns) {
+        if (endOfTurnState.turn >= endOfTurnState.level.maxTurns) {
           // end of round
-          endMessage = `End of Round! You caught ${endOfTurnState.caught.length} pokemon.`;
-          alert (endMessage);
-          endOfTurnState.gameOver(endOfTurnState.caught);
-          endIgnoreClicks = true;
+          stateUpdate.message = `End of Round! You caught ${endOfTurnState.caught.length} pokemon.`;
+          alert (stateUpdate.message);
+          endOfTurnState.gameOver([...endOfTurnState.caught, ...endOfTurnState.escaped], endOfTurnState.caught);
+          stateUpdate.ignoreClicks = true;
         } else {
           // not yet the end, so increament the turn counter
-          endTurn = endTurn + 1;
-          endIgnoreClicks = false;
+          stateUpdate.turn = endOfTurnState.turn + 1;
+          stateUpdate.deck = [...endOfTurnState.deck];
+          stateUpdate.defender = stateUpdate.deck.pop();
+          stateUpdate.attacks = this.getAttackArray(stateUpdate.defender, endOfTurnState.maxOnScreen);
+          stateUpdate.message = `What's the best type to use against ${stateUpdate.defender.displayName} (${stateUpdate.defender.varieties[0].types.join('/')}).`;
+          stateUpdate.ignoreClicks = false;
         }
 
-        return {
-          attacks: endAttacks,
-          deck: endDeck,
-          turn: endTurn,
-          message: endMessage,
-          bigWord: "",
-          ignoreClicks: endIgnoreClicks,
-          showHint: false,
-          endOfTurn: false
-        }
+        return stateUpdate;
       });
     }, 3000);
 
@@ -304,6 +308,8 @@ class TypeEffectivenessGame extends Component {
       <div className="scrollable-full">
         <div className="d-flex w-100 font-weight-bold" style={{backgroundColor: "gold"}}>
             <div className="p-2">Turn {this.state.turn}/{this.state.level.maxTurns}</div>
+            <div className="p-2">Caught {this.state.caught.length}</div> 
+            <div className="p-2">Escaped {this.state.escaped.length}</div>
             <div className="m-auto p-2 px-5">{this.state.message}</div>
             {hintImages}
         </div>
