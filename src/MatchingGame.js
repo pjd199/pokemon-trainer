@@ -139,7 +139,10 @@ class MatchingGame extends Component {
       });
     });
 
-    setTimeout(() => this.startGame(), 1);
+  }
+
+  componentDidMount() {
+    this.startGame();
   }
 
   startGame() {
@@ -420,7 +423,7 @@ class MatchingGame extends Component {
       let nameHintImage = (this.state.showHint && this.state.mode.nameHint) ? <img className="text-center pair-name-overlay" width={`${size}px`} alt={square.species.name} src={square.species.varieties[0].imageUrl} style={{filter: "brightness(0)"}}/> : <></>;
 
       columns.push(
-        <td>
+        <td key={`col-${i}`}>
           <div className="d-flex align-items-start justify-items-center text-center" style={{position: "relative"}} onClick={(e) => this.handleTableClick(i)}>
             {/* Display the standard image, with optional colourHintBackground */}
             {square.hasCard && square.firstOnTable && 
@@ -453,8 +456,9 @@ class MatchingGame extends Component {
 
 
       if (((i+1) % numberOfCols) === 0) {
+        let rowNumber = rows.length;
         rows.push(
-          <tr>
+          <tr key={`row-${rowNumber}`}>
             {columns}
           </tr>  
         );
@@ -467,7 +471,7 @@ class MatchingGame extends Component {
     let hintImages = [];
     for (let i = 0; (i < this.state.hintsRemaining) && (i < 5); i++) {
       hintImages[i] =
-        <div className="p-2">
+        <div key={i} className="p-2">
          <img height="40px" src="/images/berry/razz.png" alt="hint" onClick={(e) => this.handleShowHintClick()}/>
         </div>;
     }
@@ -494,7 +498,7 @@ class MatchingGame extends Component {
           {(this.state.bigWord !== null) &&     
             <div className="centered-overlay">
               {this.state.bigWord.split("").map((letter, i) => (
-                  <span className="big-text big-text-letter">{letter}</span>
+                  <span key={i} className="big-text big-text-letter">{letter}</span>
               ))}
             </div>
           }          

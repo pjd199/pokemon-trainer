@@ -24,7 +24,7 @@ class OptionSelectModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           {this.props.options.map((item, index) => (
-            <Button onClick={() => this.props.onOptionSelect(item)}>{item}</Button>
+            <Button key={item} onClick={() => this.props.onOptionSelect(item)}>{item}</Button>
           ))}
         </Modal.Footer>
       </Modal>
