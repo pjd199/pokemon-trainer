@@ -424,7 +424,7 @@ class MatchingGame extends Component {
 
       columns.push(
         <td key={`col-${i}`}>
-          <div className="d-flex align-items-start justify-items-center text-center" style={{position: "relative"}} onClick={(e) => this.handleTableClick(i)}>
+          <div className="text-center" style={{position: "relative"}} onClick={(e) => this.handleTableClick(i)}>
             {/* Display the standard image, with optional colourHintBackground */}
             {square.hasCard && square.firstOnTable && 
               <img className="text-center border rounded" width={`${size}px`} alt={square.species.name} src={imageSrc} style={{backgroundImage: colorHintBackground}}/>
