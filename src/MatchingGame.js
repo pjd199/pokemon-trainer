@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import cloneDeep from "lodash.clonedeep";
 import shuffleArray from "lodash.shuffle";
+import autoBindReact from 'auto-bind';
 
 class MatchingGame extends Component {
 
@@ -104,6 +105,7 @@ class MatchingGame extends Component {
    */
   constructor(props) {
     super(props);
+    autoBindReact(this);
 
     // initiailize the default state
     this.state = {
@@ -125,26 +127,29 @@ class MatchingGame extends Component {
         gameOver: props.gameOver
     };
 
-    this.startGame = this.startGame.bind(this);
-    this.handleTableClick = this.handleTableClick.bind(this);
-    this.handleShowHintClick = this.handleShowHintClick.bind(this);
-
     let preloadedImage = new Image();
     preloadedImage.src = MatchingGame.pokeballImageSrc;
 
-    window.addEventListener('resize', () => {
-      this.setState({
-        innerHeight: window.innerHeight,
-        innerWidth: window.innerWidth
-      });
-    });
-
   }
 
+  /**
+   * Called by React when the component is mounted
+   */
   componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
     this.startGame();
   }
 
+  /**
+   * Called by React when the component is unmounted
+   */
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  /**
+   * Start a new game
+   */
   startGame() {
     // setup the board
     let deck = shuffleArray(this.state.pokedex.species);
@@ -191,6 +196,19 @@ class MatchingGame extends Component {
     });
   }
 
+  /**
+   * Callback for when the window is resized
+   */
+  handleResize() {
+    this.setState({
+      innerHeight: window.innerHeight,
+      innerWidth: window.innerWidth
+    });
+  }
+
+  /**
+   * Handles the user clicking on the show hint button
+   */
   handleShowHintClick() {
     this.setState( (prevState) => {
       return {
