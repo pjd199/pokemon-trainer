@@ -71,7 +71,6 @@ class TypeEffectivenessGame extends Component {
     let deck = shuffleArray(pokedex.species).filter(value => value.varieties[0].types.length <= mode.count);
     let defender = deck.pop();
 
-
     this.state = {
       deck: deck,
       defender: defender,
@@ -99,12 +98,29 @@ class TypeEffectivenessGame extends Component {
 
     let preloadedImage = new Image();
     preloadedImage.src = TypeEffectivenessGame.pokeballImageSrc;
+  }
 
-    window.addEventListener('resize', () => {
-      this.setState({
-        innerHeight: window.innerHeight,
-        innerWidth: window.innerWidth
-      });
+  /**
+   * Called by React when the component is mounted
+  */
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  /**
+   * Called by React when the component is unmounted
+   */
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  /**
+   * Callback for when the window is resized
+   */
+  handleResize() {
+    this.setState({
+      innerHeight: window.innerHeight,
+      innerWidth: window.innerWidth
     });
   }
 
