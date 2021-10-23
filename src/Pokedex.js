@@ -97,7 +97,7 @@ class Pokedex extends Component {
 
     // fitler Personal pokedex
     if (this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].name === "personal") {
-      filteredList = filteredList.filter(species => species.varieties[0].seen);
+      filteredList = filteredList.filter(species => (species.seen || species.caught));
     }
 
     // filter on pokedex
@@ -186,7 +186,7 @@ class Pokedex extends Component {
                 <Col className="border rounded d-flex align-items-center justify-items-center" key={species.name} xs={4} md={2}>
                   <div onClick={(e) => this.handleSpeciesChange(species.name)}>
                     <LazyLoadImage key={i} className="w-100" alt={species.name} src={species.varieties[0].imageUrl} placeholderSrc="/images/blank.png"
-                      style={{filter: (isPersonalPokedex && species.varieties[0].seen && !species.varieties[0].caught) ? "brightness(0)" : ""}}/>
+                      style={{filter: (isPersonalPokedex && species.seen && !species.caught) ? "brightness(0)" : ""}}/>
                   </div>
                 </Col>    
               ))}
