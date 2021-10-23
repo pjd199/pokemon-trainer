@@ -124,6 +124,20 @@ class TypeEffectivenessGame extends Component {
     });
   }
 
+  /**
+   * Get an array of attack types and multiplies against the defender,
+   * sorted by effectiveness, and limited to max entries
+   * @param {*} defender - The pokemon being attacked
+   * @param {*} max - The maximum number of attack types to return
+   * @returns {AttackArray} Array of attack types and multipliers
+   */
+
+  /**
+   * @typedef {Object} AttackArray
+   * @property {String} name - The name of the attack type
+   * @property {number} multiplier - The value of the multiplier
+   * @property {boolean} hasBeenClicked - A extra value to register when the user clicks the attack
+   */
   getAttackArray(defender, max) {
     // load the attacks with their multipliers
     let attacks = [];
@@ -150,6 +164,10 @@ class TypeEffectivenessGame extends Component {
     return attacks;
   }
 
+
+  /**
+   * Called when the show hint button is clicked
+   */
   handleShowHintClick() {
     this.setState( (prevState) => {
       return {
@@ -162,11 +180,7 @@ class TypeEffectivenessGame extends Component {
   /**
    * Handle the throwing of the ball, and progress the game.
    * 
-   * Easy   - match two pokemon, show colors on display,
-   * Medium - match all pokemon of that color, mention color/how many left in the message,
-   * Hard   - match all pokemon of that color, hide colors
-   * 
-   * @param {Object} species - the species of pokemon that was clicked 
+   * @param {number} position - The position on the click in the attack array
    */
   handleAttackClick(position) {
 
@@ -187,6 +201,7 @@ class TypeEffectivenessGame extends Component {
       
       attacks[position].hasBeenClicked = true;
 
+      // Pokemon is caught if it's a good attack, or escaped if not
       if (attacks[position].multiplier >= 2) {
         bigWord = "Super Effective";
         caught.push(defender);
@@ -201,6 +216,7 @@ class TypeEffectivenessGame extends Component {
         escaped.push(defender);
       }
 
+      // Set the message for the screen
       message = `${attacks[position].name} type attack multiplier is ${attacks[position].multiplier} against ${defender.displayName} (${defender.varieties[0].types.join('/')})`;
       
       endOfTurn = true;
@@ -223,7 +239,6 @@ class TypeEffectivenessGame extends Component {
         if (!endOfTurnState.endOfTurn) return;
 
         let stateUpdate = {}
-        
         stateUpdate.showHint = false;
         stateUpdate.endOfTurn = false;
         stateUpdate.bigWord = "";
@@ -277,15 +292,14 @@ class TypeEffectivenessGame extends Component {
     }
     size = Math.floor(size);
 
-
     // assemble the HTML into columns and rows
     let rows = [];
     let columns = [];    
     this.state.attacks.forEach((square, i) => {
 
       let typeSrc = square.hasBeenClicked ? TypeEffectivenessGame.pokeballImageSrc : `/images/type/${square.name}.svg`
-      //let blankSrc = square.hasBeenClicked ? TypeEffectivenessGame.pokeballImageSrc : "/images/blank.png";
 
+      // Add each column of this row
       columns.push(
         <td>
           <div className="d-flex align-items-start justify-items-center text-center" style={{position: "relative"}} onClick={(e) => this.handleAttackClick(i)}>
@@ -298,7 +312,7 @@ class TypeEffectivenessGame extends Component {
         </td>
       );
 
-
+      // if this is the end of the row, start a new row
       if (((i+1) % numberOfCols) === 0) {
         rows.push(
           <tr>
