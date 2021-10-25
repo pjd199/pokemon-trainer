@@ -97,8 +97,7 @@ class App extends Component {
   componentDidMount() {
 
     // DEBUG - Clear the database - use wisely!!!
-    //this.state.personalStore.clearAllData();
-    
+    //this.state.personalStore.clearAllData(); 
 
     /*
     // DEBUG - Dump the database to the console for testing purposes

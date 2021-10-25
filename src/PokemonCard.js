@@ -14,7 +14,6 @@ class PokemonCard extends Component {
   render(props) {
     return (
       <div className="m-auto">
-{/*style={{boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}  this.props.species.color*/}
         <div className="w-100 d-flex flex-column">
           <div className="d-flex w-100 bg-light justify-content-between align-items-center">
             <h1 className="text-capitalize p-2">{this.props.variety.name}</h1>

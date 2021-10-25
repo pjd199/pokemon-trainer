@@ -321,7 +321,6 @@ class TypeEffectivenessGame extends Component {
         );
         columns = [];
       }
-
     });
 
     // create the HTML for the hint raspberries
