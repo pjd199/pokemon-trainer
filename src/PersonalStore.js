@@ -1,5 +1,5 @@
-import { openDB } from 'idb';
-import autoBind from 'auto-bind';
+  import { openDB } from 'idb';
+  import autoBind from 'auto-bind';
 
 /**
  * A class to manage the interface with the IndexedDB to store users and personal pokedexes
@@ -206,7 +206,7 @@ class PersonalStore {
   async setPersonalPokedexSeen(user, pokemon) {
     try {
       let stored = await this.getPersonalPokedexEntry(user, pokemon);
-      await this.setPersonalPokedexEntry(user, pokemon, true, stored.caught);
+      await this.setPersonalPokedexEntry(user, pokemon, true, (stored === undefined) ? false : stored.caught);
       return Promise.resolve();
     } catch(err) {
       return Promise.reject(`failed to set seen ${pokemon} for ${user}: ${err.message}`);
@@ -221,8 +221,7 @@ class PersonalStore {
    */
   async setPersonalPokedexCaught(user, pokemon) {
     try {
-      let stored = await this.getPersonalPokedexEntry(user, pokemon);
-      await this.setPersonalPokedexEntry(user, pokemon, stored.seen, true);
+      await this.setPersonalPokedexEntry(user, pokemon, true, true);
       return Promise.resolve();
     } catch(err) {
       return Promise.reject(`failed to set seen ${pokemon} for ${user}: ${err.message}`);
@@ -240,7 +239,7 @@ class PersonalStore {
     try {
       let db = await this.openDatabase();
       let userId = await this.getUserId(user);
-      let results = await db.getAll("personalPokedex", [userId, pokemon]);
+      let results = await db.get("personalPokedex", [userId, pokemon]);
       return Promise.resolve(results);
     } catch(err) {
       return Promise.reject(`failed to getPersonalPokedexEntries for ${user} ${pokemon}: ${err.message}`);

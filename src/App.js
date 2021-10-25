@@ -96,9 +96,11 @@ class App extends Component {
    */
   componentDidMount() {
 
+    /*
     // DEBUG - Clear the database - use wisely!!!
-    //this.state.personalStore.clearAllData(); 
-
+    this.state.personalStore.clearAllData(); 
+    */
+    
     /*
     // DEBUG - Dump the database to the console for testing purposes
     this.state.personalStore.dump()
@@ -139,7 +141,7 @@ class App extends Component {
         })
         .catch(reason => {
           // undefied means there is no values stored, so not an error
-          if (reason !== undefined) {
+          if (reason !== "undefined") {
             console.error(reason)
           }
         });
@@ -154,19 +156,29 @@ class App extends Component {
    * @param {species} array
    */
   async addToPersonalPokedex(seen, caught) {
+    // first, update the personal store
+    // mark the pokemon as seen
+    for (let i in seen) {
+      await this.state.personalStore.setPersonalPokedexSeen(this.state.currentUser, seen[i].name);
+    }
+
+    // mark the pokemon as caught
+    for (let i in caught) {
+      await this.state.personalStore.setPersonalPokedexCaught(this.state.currentUser, caught[i].name);
+    }
+
+    // second, update the state
     this.setState ((prevState) => {
       let pokedexes = cloneDeep(prevState.pokedexes);
       
       // mark the pokemon as seen
       for (let i in seen) {
         pokedexes.personal.species.find(x => x.name === seen[i].name).seen = true;
-        prevState.personalStore.setPersonalPokedexSeen(prevState.currentUser, seen[i].name);
       }
 
       // mark the pokemon as caught
       for (let i in caught) {
         pokedexes.personal.species.find(x => x.name === caught[i].name).caught = true;
-        prevState.personalStore.setPersonalPokedexCaught(prevState.currentUser, caught[i].name);
       }
 
       return {
