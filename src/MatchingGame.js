@@ -444,11 +444,11 @@ class MatchingGame extends Component {
         <td key={`col-${i}`}>
           <div className="text-center" style={{position: "relative"}} onClick={(e) => this.handleTableClick(i)}>
             {/* Display the standard image, with optional colourHintBackground */}
-            {square.hasCard && square.firstOnTable && 
+            {(square.hasCard && square.firstOnTable) && 
               <img className="text-center border rounded" width={`${size}px`} alt={square.species.name} src={imageSrc} style={{backgroundImage: colorHintBackground}}/>
             }
             {/* Display the paired image */}
-            {square.hasCard && !square.firstOnTable && 
+            {(square.hasCard && !square.firstOnTable) && 
               <div>
                 <img className="text-center border rounded" width={`${size}px`} alt={square.species.name} src={blankSrc} style={{backgroundImage: "radial-gradient(circle, white 10%, orangered 50%, white 60%"}}/>
                 {nameHintImage}
@@ -456,14 +456,14 @@ class MatchingGame extends Component {
               </div>
             }
             {/* Add the type marker */}
-            {this.state.showHint && this.state.mode.typeHint &&
+            {(this.state.showHint && this.state.mode.typeHint) &&
               <div className="type-hint">
                 {(square.species.varieties[0].types.length >= 1) && <img style={{width: `${Math.floor(size/5)}px`}} src={`/images/type/${square.species.varieties[0].types[0]}.svg`} alt={square.species.varieties[0].types[0]}/>}
                 {(square.species.varieties[0].types.length === 2) && <img style={{width: `${Math.floor(size/5)}px`}} src={`/images/type/${square.species.varieties[0].types[1]}.svg`} alt={square.species.varieties[0].types[1]}/>}
               </div>
             }
             {/* Add the shape hint */}
-            {this.state.showHint && this.state.mode.shapeHint &&
+            {(this.state.showHint && this.state.mode.shapeHint) &&
               <div className="shape-hint">
                 <img style={{width: `${Math.floor(size/5)}px`}} src={`/images/shape/${square.species.shape}.png`} alt={square.species.shape}/>
               </div>

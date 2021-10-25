@@ -195,7 +195,7 @@ class Pokedex extends Component {
         </div>
         <div className="scrollable-right">
           <div>
-          {((this.state.currentSpecies === null) || this.state.currentVariety === null) &&
+          {((this.state.currentSpecies === null) || (this.state.currentVariety === null)) &&
             <div className="text-center">
               <h1>The {this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].displayName} Pokedéx</h1>
               <LazyLoadImage className="w-75" 
@@ -205,7 +205,7 @@ class Pokedex extends Component {
               />
             </div>
           }
-            {((this.state.currentSpecies !== null) && this.state.currentVariety !== null) &&
+            {((this.state.currentSpecies !== null) && (this.state.currentVariety !== null)) &&
               <PokemonCard pokedex={this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]]} species={this.state.currentSpecies} variety={this.state.currentVariety}/>
             }
           </div>
