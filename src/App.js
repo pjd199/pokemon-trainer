@@ -7,6 +7,7 @@ import Pokedex from "./Pokedex";
 import MatchingGame from "./MatchingGame";
 import TypeEffectivenessGame from "./TypeEffectivenessGame";
 import Quest from "./Quest";
+import Settings from "./Settings";
 import TextInputModal from "./TextInputModal";
 import cloneDeep from "lodash.clonedeep";
 import PersonalStore from "./PersonalStore";
@@ -85,7 +86,7 @@ class App extends Component {
       pokedexes: pokedexes,
       species: species,
       varieties: varieties,
-      userList: null,
+      userList: [],
       currentUser: null,
       personalStore: personalStore
     };
@@ -108,7 +109,7 @@ class App extends Component {
     .catch(reason => console.error(reason));
     */
 
-    // Load the settings and the personal pokedex
+    // Load the settings, then the personal pokedex
     this.state.personalStore.getAllSettings()
     .then(settings => {
       // load the settings and set the state
@@ -117,37 +118,15 @@ class App extends Component {
 
       this.setState({
         currentUser: firstTime ? null : settings.currentUser,
-        showCreateUser: firstTime,
-        userList: settings.userList
+        userList: firstTime ? [] : settings.userList
       });
 
       // load the personal pokedex, if one exists
       if (!firstTime) {
-        this.state.personalStore.getPersonalPokedexEntries(settings.currentUser)
-        .then(results => {
-            this.setState((prevState) => { 
-              let pokedexes = cloneDeep(prevState.pokedexes);
-    
-              // assign values from the personal pokedex
-              for (let i in results) {
-                pokedexes.personal.species.find(x => (x.name === results[i].pokemon)).seen = results[i].seen;
-                pokedexes.personal.species.find(x => (x.name === results[i].pokemon)).caught = results[i].caught;
-              }
-    
-              return {
-                pokedexes: pokedexes
-              }
-            });
-        })
-        .catch(reason => {
-          // undefied means there is no values stored, so not an error
-          if (reason !== "undefined") {
-            console.error(reason)
-          }
-        });
+        this.loadPersonalPokedex(settings.currentUser);
       }
     })
-    .catch(reason => console.error(reason));
+    .catch(err => console.error(err.message));
   }
 
 
@@ -156,6 +135,12 @@ class App extends Component {
    * @param {species} array
    */
   async addToPersonalPokedex(seen, caught) {
+
+    // If there are no users, then ignore this request
+    if ((this.state.userList === 0) || (this.state.currentUser === null)) {
+      return;
+    }
+
     // first, update the personal store
     // mark the pokemon as seen
     for (let i in seen) {
@@ -187,23 +172,111 @@ class App extends Component {
     });
   }
 
+  /**
+   * Load personal pokedex from the personal store
+   * @param {String} name 
+   */
+   loadPersonalPokedex(user) {
+    this.state.personalStore.getPersonalPokedexEntries(user)
+    .then(results => {
+        this.setState((prevState) => { 
+          let pokedexes = cloneDeep(prevState.pokedexes);
+
+          // assign values from the personal pokedex
+          for (let i in results) {
+            pokedexes.personal.species.find(x => (x.name === results[i].pokemon)).seen = results[i].seen;
+            pokedexes.personal.species.find(x => (x.name === results[i].pokemon)).caught = results[i].caught;
+          }
+
+          return {
+            pokedexes: pokedexes
+          }
+        });
+    })
+    .catch(err => {
+      // undefied means there is no values stored, so not an error
+      if (err !== "undefined") {
+        console.error(err.message)
+      }
+    });
+   }
 
   /**
    * Add a new user to the personalStore
    * @param {String} name 
    */
   async addUser(name) {
+
+    if (name === "") {
+      return;
+    }
+
     // add the user, and make the new user the current user
     await this.state.personalStore.addUser(name);
+    await this.changeCurrentUser(name);
+  }
+
+  /**
+   * Change the current user
+   * @param {String} name 
+   */
+   async changeCurrentUser(name) {
+    // add the user, and make the new user the current user
     await this.state.personalStore.setSetting("currentUser", name); 
     
     // get the updated userList
     let userList = await this.state.personalStore.getUserList();
     this.setState({
       userList: userList,
-      currentUser: name,
-      showCreateUser: false
+      currentUser: name
     });
+  }
+
+  /**
+   * Remove a new user from the personalStore
+   * @param {String} name 
+   */
+  async removeUser(name) {
+
+    let newState = {};
+
+    // remove the user
+    await this.state.personalStore.removeUser(name);
+    
+    // get the updated userList
+    newState.userList = await this.state.personalStore.getUserList();
+
+    // update the currentUser if we've just deleted the currrentUser
+    if (name === this.state.currentUser) {
+      if (newState.userList.length > 0) {
+        // we can change to another user
+        newState.currentUser = newState.userList[0];
+        await this.state.personalStore.setSetting("currentUser", newState.currentUser);
+        this.loadPersonalPokedex(newState.currentUser);  
+      } else {
+        // no more users - clear the currentUser and the personal pokedex
+        newState.currentUser = null;
+        await this.state.personalStore.setSetting("currentUser", null);
+        this.setState((prevState) => { 
+          let pokedexes = cloneDeep(prevState.pokedexes);
+
+          for (let i in pokedexes.personal.species) {
+            pokedexes.personal.species[i].seen = false;
+            pokedexes.personal.species[i].caught = false;
+          }
+          // set the Kanto starter pokemon to seen, to get the personal pokedex started
+          pokedexes.personal.species.find(x => (x.name === "bulbasaur")).seen = true;
+          pokedexes.personal.species.find(x => (x.name === "charmander")).seen = true;
+          pokedexes.personal.species.find(x => (x.name === "squirtle")).seen = true;
+
+          return {
+            pokedexes: pokedexes
+          }
+        });
+      }
+    }
+    
+    this.setState(newState);
   }
   
   /**
@@ -212,14 +285,6 @@ class App extends Component {
    */
   render() {
     let self = this;
-
-    if ((this.state.pokedexes === null) || (this.state.species === null) || (this.state.varieties === null)) {
-      return (
-        <div className="App">
-          <p>Loading Data</p>
-        </div>
-      );
-    } 
 
     return (
       <>
@@ -242,11 +307,11 @@ class App extends Component {
                   <LinkContainer to="/Games">
                     <Nav.Link>Games</Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to="/pokedex">
+                  <LinkContainer to="/Pokedex">
                     <Nav.Link>Pokedex</Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to="/about">
-                    <Nav.Link>About</Nav.Link>
+                  <LinkContainer to="/Settings">
+                    <Nav.Link>Settings</Nav.Link>
                   </LinkContainer>
                 </Nav>
             </Navbar.Collapse>
@@ -257,17 +322,22 @@ class App extends Component {
               (props) => 
                 <div className="scrollable-full full-height d-flex justify-content-center flex-column bg-image" style={{backgroundImage: "url(/images/pokemon-training-center.png)"}}>
                   <div className="bg-opacity-75 bg-white text-center p-3 m-auto">
-                    <h1>Welcome {this.state.currentUser}</h1>
+                    <h1>Welcome {(this.state.currentUser != null) && this.state.currentUser}</h1>
                     <p>
                       Are you ready to become a Pokemon Master?
                     </p>
+                    {(this.state.userList.length === 0) &&
+                      <Button className="m-3" variant="primary" onClick={() => props.history.push("/quest")}>
+                        Let's Go!
+                      </Button> 
+                    }
                     <Button className="m-3" variant="primary" onClick={() => props.history.push("/quest")}>
                       Let's Go!
                     </Button>
                   </div>
                 </div>
             }/>
-            <Route path="/quest">
+            <Route path="/Quest">
               <Quest pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}
                 changeUrl={(url) => this.props.history.push(url)}
               />
@@ -298,32 +368,27 @@ class App extends Component {
                 gameOver={(seen, caught) => {self.addToPersonalPokedex(seen, caught); props.history.goBack();}}
                 />
             } />
-            <Route exact path="/pokedex">
+            <Route exact path="/Pokedex">
               <Pokedex pokedexes={this.state.pokedexes} species={this.state.species} varieties={this.state.varieties}/>
             </Route>
-            <Route exact path="/about">
-              <div className="scrollable-full full-height d-flex justify-content-center flex-column bg-image" style={{backgroundImage: "url(images/wallpaper.jpg)"}}>
-                <div className="bg-opacity-75 bg-white text-center p-3 m-auto">
-                  <h1>Created by Pete Dibdin</h1>
-                  <h2>Tested by Caleb Dibdin</h2>
-                  <p>
-                    Coded in Javascript, HTML and CSS<br/>
-                    Frameworks: React, Bootstrap and React-Bootstrap<br/>
-                    Pokémon data and images provided by PokéAPI<br/>
-                  </p>
-                </div>
-              </div>
-
+            <Route exact path="/Settings">
+              <Settings
+                userList={this.state.userList}
+                currentUser={this.state.currentUser}
+                onAddUser={(user) => self.addUser(user)}
+                onChangeCurrentUser={(user) => self.changeCurrentUser(user)}
+                onRemoveUser={(user) => self.removeUser(user)}
+              />
             </Route>
           </Switch>
         </BrowserRouter>
-
+        
         <TextInputModal
-            title="Create new user"
-            message="Welcome! Please enter you name below"
-            show={this.state.showCreateUser}
-            onHide={() => this.setState({showCreateUser: false})}
-            onSubmit={(user) => this.addUser(user)}
+          title="Welcome!"
+          message="What is your name?"
+          required="true"
+          show={(this.state.userList.length === 0)}
+          onSubmit={(user) => this.addUser(user)}
         />
       </>
     );
