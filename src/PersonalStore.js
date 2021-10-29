@@ -110,6 +110,7 @@ class PersonalStore {
     try {
       let db = await this.openDatabase();
       let userList = await db.getAll("users");
+      console.log(JSON.stringify(userList))
       return Promise.resolve(userList);
     } catch(err) {
       return Promise.reject(`failed to get userList: ${err.message}`);
