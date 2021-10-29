@@ -45,7 +45,7 @@ class TextInputModal extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => this.props.onSubmit(this.state.inputValue)}>Ok</Button>
+          <Button onClick={() => {this.props.onSubmit(this.state.inputValue); this.setState({inputValue: ""});}}>Ok</Button>
         </Modal.Footer>
       </Modal>
     );
