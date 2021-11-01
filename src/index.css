@@ -82,6 +82,13 @@ html, body {
 	background-size: cover;
 }
 
+.pokedex-id {
+	font-family: 'Poppins', sans-serif;
+	font-size: larger;
+	text-align: center;
+	width: 100%;
+}
+
 .pair-name-overlay {
 	font-family: 'Poppins', sans-serif;
 	font-size: larger;
