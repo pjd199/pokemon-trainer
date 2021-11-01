@@ -304,9 +304,11 @@ class App extends Component {
                   <LinkContainer to="/Quest">
                     <Nav.Link>Quest</Nav.Link>
                   </LinkContainer>
+                  {/*
                   <LinkContainer to="/Games">
                     <Nav.Link>Games</Nav.Link>
                   </LinkContainer>
+                  */}
                   <LinkContainer to="/Pokedex">
                     <Nav.Link>Pokedex</Nav.Link>
                   </LinkContainer>

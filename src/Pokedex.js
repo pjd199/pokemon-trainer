@@ -95,10 +95,12 @@ class Pokedex extends Component {
   getFilteredList() {
     let filteredList = [...this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].species];
 
+    /*
     // fitler Personal pokedex
     if (this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].name === "personal") {
       filteredList = filteredList.filter(species => (species.seen || species.caught));
     }
+    */
 
     // filter on pokedex
     if (this.state.filter.color > 0) {
@@ -184,10 +186,23 @@ class Pokedex extends Component {
               {(filteredList.length === 0) && <h1 className="text-center">Found no matching Pokemon</h1>}
               {filteredList.map((species, i) => (
                 <Col className="border rounded d-flex align-items-center justify-items-center" key={species.name} xs={4} md={2}>
-                  <div onClick={(e) => this.handleSpeciesChange(species.name)}>
-                    <LazyLoadImage key={i} className="w-100" alt={species.name} src={species.varieties[0].imageUrl} placeholderSrc="/images/blank.png"
-                      style={{filter: (isPersonalPokedex && species.seen && !species.caught) ? "brightness(0)" : ""}}/>
-                  </div>
+                  {!(isPersonalPokedex && !species.seen && !species.caught) &&
+                    <div onClick={(e) => this.handleSpeciesChange(species.name)}>
+                      <LazyLoadImage 
+                        key={i} 
+                        className="w-100" 
+                        alt={species.name} 
+                        src={(isPersonalPokedex && !species.seen && !species.caught) ? "/images/blank.png" : species.varieties[0].imageUrl} 
+                        placeholderSrc="/images/blank.png"
+                        style={{filter: (isPersonalPokedex && species.seen && !species.caught) ? "brightness(0)" : ""}}
+                      />
+                    </div>
+                  }
+                  {(isPersonalPokedex && !species.seen && !species.caught) && 
+                    <div className="d-flex align-items-center justify-items-center w-100">
+                      <p className="pokedex-id w-100">? {species.id} ?</p>
+                    </div>
+                  }
                 </Col>    
               ))}
           </Row>
