@@ -466,10 +466,7 @@ class MatchingGame extends Component {
             }
             {/* Add the shape hint */}
             {(this.state.showHint && this.state.mode.shapeHint) &&
-              <div className="">
-                <img style={{width: `${Math.floor(size/5)}px`}} src={`/images/shape/${square.species.shape}.png`} alt={square.species.shape}/>
-                X
-              </div>
+              <img className="shape-hint" style={{width: `${Math.floor(size/5)}px`}} src={`/images/shape/${square.species.shape}.png`} alt={square.species.shape}/>
             }
           </div>
         </td>
