@@ -440,6 +440,15 @@ class MatchingGame extends Component {
       let blankSrc = square.hasBeenClicked ? MatchingGame.pokeballImageSrc : "/images/blank.png";
       let nameHintImage = (this.state.showHint && this.state.mode.nameHint) ? <img className="text-center pair-name-overlay" width={`${size}px`} alt={square.species.name} src={square.species.varieties[0].imageUrl} style={{filter: "brightness(0)"}}/> : <></>;
 
+
+      alert(`${this.state.showHint}, ${this.state.mode.shapeHint}, ${Math.floor(size/5)}px, /images/shape/${square.species.shape}.png, square.species.shape`)
+      {(this.state.showHint && this.state.mode.shapeHint) &&
+        <div className="shape-hint">
+          <img style={{width: `${Math.floor(size/5)}px`}} src={`/images/shape/${square.species.shape}.png`} alt={square.species.shape}/>
+          X
+        </div>
+
+
       columns.push(
         <td key={`col-${i}`}>
           <div className="text-center position-relative" onClick={(e) => this.handleTableClick(i)}>
