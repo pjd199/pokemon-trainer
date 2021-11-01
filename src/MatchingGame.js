@@ -444,7 +444,7 @@ class MatchingGame extends Component {
       
       columns.push(
         <td key={`col-${i}`}>
-          <div className="text-center position-relative" onClick={(e) => this.handleTableClick(i)}>
+          <div className="position-relative text-center" onClick={(e) => this.handleTableClick(i)}>
             {/* Display the standard image, with optional colourHintBackground */}
             {(square.hasCard && square.firstOnTable) && 
               <img className="text-center border rounded" width={`${size}px`} alt={square.species.name} src={imageSrc} style={{backgroundImage: colorHintBackground}}/>
@@ -505,14 +505,12 @@ class MatchingGame extends Component {
             {hintImages}
         </div>
 
-        <div className="w-100 d-flex justify-items-center">
-          <div className="m-auto">
-            <table>
-              <tbody>
-                {rows}
-              </tbody>
-            </table>
-          </div>
+        <div>
+          <table className="mx-auto position-relative">
+            <tbody>
+              {rows}
+            </tbody>
+          </table>
           {(this.state.bigWord !== null) &&     
             <div className="centered-overlay">
               {this.state.bigWord.split("").map((letter, i) => (
