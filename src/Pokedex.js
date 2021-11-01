@@ -95,13 +95,6 @@ class Pokedex extends Component {
   getFilteredList() {
     let filteredList = [...this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].species];
 
-    /*
-    // fitler Personal pokedex
-    if (this.props.pokedexes[Pokedex.filters.pokedex.names[this.state.filter.pokedex]].name === "personal") {
-      filteredList = filteredList.filter(species => (species.seen || species.caught));
-    }
-    */
-
     // filter on pokedex
     if (this.state.filter.color > 0) {
       let name = Pokedex.filters.color.names[this.state.filter.color];
